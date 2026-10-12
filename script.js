@@ -13,7 +13,8 @@ let previousInput = '';
 let operator = null;
 let shouldResetDisplay = false;
 
-// ✨ Historial de operaciones
+// ✨ Historial de operaciones (solo se guarda en localStorage, no se muestra en la UI)
+const MAX_HISTORY = 50;
 let operationHistory = JSON.parse(localStorage.getItem('operationHistory')) || [];
 
 // ==========================================
@@ -67,15 +68,6 @@ function appendToDisplay(value) {
 /**
  * Limpia el display, el historial y reinicia todas las variables
  */
- 
-function handleCalculationError(error) {
-  display.value = `Error: ${error.message}`;
-  currentInput = '0';
-  operator = null;
-  shouldResetDisplay = true;
-  triggerVibration(CONFIG.VIBRATION_LONG);
-} 
- 
 function clearDisplay() {
   currentInput = '0';
   previousInput = '';
@@ -189,6 +181,7 @@ function calculate() {
   // ✨ Guardar operación en historial persistente
   const operation = `${previousInput} ${operator} ${currentInput} = ${result}`;
   operationHistory.push(operation);
+  operationHistory = operationHistory.slice(-MAX_HISTORY);
   localStorage.setItem('operationHistory', JSON.stringify(operationHistory));
   
   // Mostrar resultado final
@@ -221,7 +214,7 @@ document.addEventListener('keydown', (e) => {
   
   // Operadores
   if (['+', '-', '*', '/'].includes(e.key)) {
-    setOperator(e.key === '*' ? '×' : e.key);
+    setOperator(e.key);
   }
   
   // Calcular resultado
