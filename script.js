@@ -50,11 +50,13 @@ themeToggle.addEventListener('click', () => {
  */
 function appendToDisplay(value) {
   // ✨ VALIDACIÓN: Evita múltiples decimales en el mismo número
-  if (value === '.' && currentInput.includes('.')) return;
-  
   // Si debe resetear o es el primer dígito
   if (shouldResetDisplay || currentInput === '0') currentInput = '';
   shouldResetDisplay = false;
+
+  // ✨ VALIDACIÓN: Evita múltiples decimales en el mismo número
+  if (value === '.' && currentInput.includes('.')) return;
+  if (value === '.' && currentInput === '') currentInput = '0';
   
   // Agregar el valor
   currentInput += value;
@@ -85,6 +87,7 @@ function clearDisplay() {
  */
 function deleteLast() {
   currentInput = currentInput.length > 1 ? currentInput.slice(0, -1) : '0';
+  if (currentInput === '-') currentInput = '0';
   display.value = currentInput;
   navigator.vibrate?.(30);
 }
@@ -125,7 +128,10 @@ function percent() {
 function setOperator(op) {
   // Validación: no permite operador si el input está vacío o es solo un guion
   if (currentInput === '' || currentInput === '-') return;
-  
+
+  // Si ya hay una operación pendiente, la calcula primero (2 + 3 + → 5 +)
+  if (operator && !shouldResetDisplay) calculate();
+
   previousInput = currentInput;
   operator = op;
   history.textContent = currentInput + ' ' + op;
@@ -140,9 +146,6 @@ function setOperator(op) {
  * Realiza la operación matemática y muestra el resultado
  */
 function calculate() {
-  // Mostrar operación en historial
-  history.textContent = previousInput + ' ' + operator + ' ' + currentInput + ' =';
-  
   // Validación: no calcula si no hay operador establecido
   if (!operator || shouldResetDisplay) return;
 
