@@ -151,35 +151,20 @@ function calculate() {
 
   let prev = parseFloat(previousInput);
   let current = parseFloat(currentInput);
-  let result = 0;
+  let result = operar(prev, operator, current);
 
-  // ✨ Realizar operación según el operador
-  switch (operator) {
-    case '+': 
-      result = prev + current; 
-      break;
-    case '-': 
-      result = prev - current; 
-      break;
-    case '*': 
-      result = prev * current; 
-      break;
-    case '/': 
-      // ✨ MEJORA: Validación especial para división por cero
-      if (current === 0) {
-        display.value = 'Error: División por 0';
-        currentInput = '0';
-        operator = null;
-        shouldResetDisplay = true;
-        navigator.vibrate?.(100); // Vibración más larga para indicar error
-        return; // Detiene la operación
-      }
-      result = prev / current;
-      break;
+  // ✨ Validación especial para división por cero (operar devuelve null)
+  if (result === null) {
+    display.value = 'Error: División por 0';
+    currentInput = '0';
+    operator = null;
+    shouldResetDisplay = true;
+    navigator.vibrate?.(100); // Vibración más larga para indicar error
+    return; // Detiene la operación
   }
 
   // Redondear para evitar errores de precisión flotante
-  result = Math.round(result * 100000000) / 100000000;
+  result = redondear(result);
   
   // ✨ Guardar operación en historial persistente
   const operation = `${previousInput} ${operator} ${currentInput} = ${result}`;

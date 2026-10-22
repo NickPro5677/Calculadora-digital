@@ -60,6 +60,10 @@ JSON.parse(localStorage.getItem('operationHistory'))
 - A hacer un diseño **responsive** con CSS para que funcione bien en el teléfono.
 - Que los números **flotantes** no son exactos (`0.1 + 0.2`) y cómo redondear el resultado.
 
+## Pruebas
+
+La lógica de las cuentas está en `calc.js` (funciones puras) y se prueba con `npm test` (usa `node:test`, sin dependencias). GitHub Actions corre las pruebas en cada push.
+
 ## Licencia
 
 Distribuido bajo la licencia MIT. Mira el archivo [LICENSE](LICENSE).
