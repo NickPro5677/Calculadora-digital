@@ -1,6 +1,6 @@
 const test = require('node:test');
 const assert = require('node:assert');
-const { operar, redondear } = require('../calc.js');
+const { operar, redondear } = require('../src/calc.js');
 
 test('suma, resta, multiplicación y división', () => {
   assert.strictEqual(operar(2, '+', 3), 5);
