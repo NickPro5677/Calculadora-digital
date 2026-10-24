@@ -49,10 +49,9 @@
 
 /* ============================================
    TEMA OSCURO (alternativa con el botón ☀️/🌙)
-   Hoy la calculadora arranca oscura y el botón pone la clase .light,
-   así que los colores oscuros van en body:not(.light).
+   Arranca en claro; el botón pone la clase .dark.
    ============================================ */
-body:not(.light) {
+body.dark {
   --bg: #000000;
   --card: #1c1c1e;
   --fill: #2c2c2e;

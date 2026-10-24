@@ -22,9 +22,10 @@ let operationHistory = JSON.parse(localStorage.getItem('operationHistory')) || [
 // ==========================================
 window.addEventListener('load', () => {
   const savedTheme = localStorage.getItem('calculatorTheme');
-  if (savedTheme === 'light') {
-    document.body.classList.add('light');
-    themeToggle.textContent = '🌙';
+  // Ahora arranca en claro; solo se pone oscuro si la persona lo eligió antes
+  if (savedTheme === 'dark') {
+    document.body.classList.add('dark');
+    themeToggle.textContent = '☀️';
   }
 });
 
@@ -32,12 +33,12 @@ window.addEventListener('load', () => {
 // EVENTOS - Tema claro/oscuro
 // ==========================================
 themeToggle.addEventListener('click', () => {
-  document.body.classList.toggle('light');
-  const isLight = document.body.classList.contains('light');
-  themeToggle.textContent = isLight ? '🌙' : '☀️';
+  document.body.classList.toggle('dark');
+  const isDark = document.body.classList.contains('dark');
+  themeToggle.textContent = isDark ? '☀️' : '🌙';
   
   // ✨ Guardar preferencia de tema
-  localStorage.setItem('calculatorTheme', isLight ? 'light' : 'dark');
+  localStorage.setItem('calculatorTheme', isDark ? 'dark' : 'light');
   navigator.vibrate?.(30);
 });
 
