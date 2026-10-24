@@ -48,6 +48,27 @@
 }
 
 /* ============================================
+   TEMA OSCURO (alternativa con el botón ☀️/🌙)
+   Hoy la calculadora arranca oscura y el botón pone la clase .light,
+   así que los colores oscuros van en body:not(.light).
+   ============================================ */
+body:not(.light) {
+  --bg: #000000;
+  --card: #1c1c1e;
+  --fill: #2c2c2e;
+  --fill-hover: #3a3a3c;
+  --fill-strong: #48484a;
+  --border: #38383a;
+  --text: #f5f5f7;
+  --text-2: #a1a1a6;
+  --shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  --shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.6);
+}
+
+/* Gris de las teclas de función (C, ⌫) en tema claro */
+:root { --fill-strong: #e8e8ed; }
+
+/* ============================================
    RESET Y ESTILOS GLOBALES
    ============================================ */
 * {
@@ -56,9 +77,6 @@
   box-sizing: border-box;
 }
 
-/* ============================================
-   ESTILOS DEL BODY
-   ============================================ */
 body {
   font-family: var(--font);
   -webkit-font-smoothing: antialiased;
@@ -66,11 +84,11 @@ body {
   color: var(--text);
   min-height: 100vh;
   min-height: 100dvh;
-  padding: 12px;
+  padding: var(--space-4);
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: background 0.5s ease;
+  transition: background var(--dur) var(--ease);
   overflow-x: hidden;
 }
 
@@ -78,19 +96,16 @@ body {
    CONTENEDOR PRINCIPAL - CALCULADORA
    ============================================ */
 .calculator {
-  background: #1e1e1e;
-  padding: 25px;
-  padding-top: 70px; /* Espacio para el botón tema + historial */
-  border-radius: 25px;
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
-  width: 350px;
+  background: var(--card);
+  padding: var(--space-5);
+  padding-top: 72px; /* Espacio para el botón tema + historial */
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  width: 100%;
+  max-width: 360px;
   position: relative;
-  transition: all 0.5s ease;
-}
-
-/* ✨ Mejora: Sombra de enfoque para accesibilidad */
-.calculator:focus-within {
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), 0 0 20px rgba(102, 126, 234, 0.3);
+  transition: background var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+  animation: fadeIn 250ms var(--ease);
 }
 
 /* ============================================
@@ -98,44 +113,37 @@ body {
    ============================================ */
 .history {
   position: absolute;
-  top: 28px;
-  left: 25px;
-  right: 80px; /* Deja espacio al botón del tema */
-  color: rgba(255, 255, 255, 0.7);
+  top: 30px;
+  left: var(--space-5);
+  right: 72px; /* Deja espacio al botón del tema */
+  color: var(--text-2);
   text-align: right;
-  font-size: 1.1rem;
+  font-size: 1rem;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  transition: color 0.3s ease;
-  font-weight: 500;
+  font-variant-numeric: tabular-nums;
 }
 
 /* ============================================
-   PANTALLA (DISPLAY)
+   PANTALLA (DISPLAY): números grandes y finos, sin caja
    ============================================ */
 .display {
   width: 100%;
-  height: 90px;
-  background: #000;
-  color: white;
-  font-size: 3rem;
-  text-align: right;
-  padding: 0 20px;
-  border: none;
-  border-radius: 15px;
-  margin-bottom: 20px;
-  transition: all 0.3s ease;
-  font-weight: 300;
-  letter-spacing: 2px;
+  height: 88px;
+  background: transparent;
+  color: var(--text);
   font-family: var(--font);
+  font-size: 3.25rem;
+  font-weight: 300;
+  letter-spacing: -0.02em;
   font-variant-numeric: tabular-nums; /* todos los números miden lo mismo */
+  text-align: right;
+  padding: 0 var(--space-1);
+  border: none;
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--space-4);
   cursor: default;
-}
-
-/* ✨ Mejora: Efecto visual en el display */
-.display[readonly] {
-  opacity: 1;
 }
 
 /* ============================================
@@ -144,90 +152,62 @@ body {
 .buttons {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 15px;
+  gap: var(--space-3);
 }
 
 /* ============================================
-   ESTILOS DE BOTONES GENERALES
+   BOTONES (todos)
    ============================================ */
 .btn {
-  height: 70px;
+  height: 64px;
   border: none;
-  border-radius: 15px;
-  font-size: 1.6rem;
-  font-weight: bold;
+  border-radius: var(--radius);
+  font-family: inherit;
+  font-size: 1.5rem;
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   user-select: none;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: background var(--dur) var(--ease), transform 150ms var(--ease), filter var(--dur) var(--ease);
+  -webkit-tap-highlight-color: transparent;
 }
 
-/* ✨ Estado activo con mejor feedback visual */
-.btn:active {
-  transform: scale(0.92);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-}
+/* Al pulsar: se hunde un poquito */
+.btn:active { transform: scale(0.95); }
 
-/* ✨ Borde de enfoque solo al usar el teclado (no queda pegado al tocar en el teléfono) */
-.btn:focus-visible {
-  outline: 2px solid #667eea;
+/* Borde de enfoque solo al usar el teclado (no queda pegado al tocar en el teléfono) */
+.btn:focus-visible,
+.theme-toggle:focus-visible {
+  outline: var(--focus-ring);
   outline-offset: 2px;
 }
 
-/* ============================================
-   BOTONES DE NÚMEROS
-   ============================================ */
+/* Números */
 .number, .zero {
-  background: #333;
-  color: white;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  background: var(--fill);
+  color: var(--text);
 }
+.number:hover, .zero:hover { background: var(--fill-hover); }
 
-.number:hover, .zero:hover {
-  background: #444;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-}
-
-/* ============================================
-   BOTONES DE OPERADORES
-   ============================================ */
+/* Operadores e igual: el único color de acento */
 .operator, .equal {
-  background: #ff9500;
-  color: white;
-  box-shadow: 0 4px 15px rgba(255, 149, 0, 0.3);
+  background: var(--accent);
+  color: var(--on-accent);
 }
+.operator:hover, .equal:hover { background: var(--accent-hover); }
 
-.operator:hover, .equal:hover {
-  background: #ffb143;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(255, 149, 0, 0.4);
+/* Limpiar, borrar, % y +/−: gris, para que el azul quede solo en las operaciones */
+.clear, .func {
+  background: var(--fill-strong);
+  color: var(--text);
 }
+.clear:hover, .func:hover { background: var(--fill-hover); }
 
-/* ============================================
-   BOTONES DE LIMPIAR
-   ============================================ */
-.clear {
-  background: #a6a6a6;
-  color: black;
-  box-shadow: 0 4px 15px rgba(166, 166, 166, 0.3);
-  font-weight: 600;
-}
-
-.clear:hover {
-  background: #c5c5c5;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(166, 166, 166, 0.4);
-}
-
-/* ============================================
-   BOTÓN CERO (ANCHO DOBLE)
-   ============================================ */
-.zero {
-  grid-column: span 2;
-}
+/* Botón cero: ancho normal. Con ancho doble la última fila tenía 5 botones
+   y el "=" quedaba solo en una fila extra. */
+.zero { grid-column: auto; }
 
 /* ============================================
    BOTÓN DE CAMBIO DE TEMA
@@ -236,261 +216,66 @@ body {
   position: absolute;
   top: 20px;
   right: 20px;
-  width: 50px;
-  height: 50px;
-  background: #333;
-  border: 2px solid #444;
+  width: 40px;
+  height: 40px;
+  background: var(--fill);
+  border: none;
   border-radius: 50%;
-  font-size: 1.5rem;
+  font-size: 1.15rem;
   cursor: pointer;
   z-index: 10;
-  transition: all 0.3s ease;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: background var(--dur) var(--ease), transform var(--dur) var(--ease);
 }
-
-.theme-toggle:hover {
-  background: #444;
-  transform: scale(1.1) rotate(15deg);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
-}
-
-.theme-toggle:focus {
-  outline: 2px solid #667eea;
-  outline-offset: 3px;
-}
+.theme-toggle:hover { background: var(--fill-hover); }
+.theme-toggle:active { transform: scale(0.92); }
 
 /* ============================================
-   TEMA CLARO (LIGHT MODE)
-   ============================================ */
-body.light {
-  background: var(--bg);
-}
-
-body.light .calculator {
-  background: white;
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
-}
-
-body.light .display {
-  background: #f8f9fa;
-  color: #333;
-  border: 2px solid #e0e0e0;
-}
-
-body.light .number,
-body.light .zero {
-  background: #e0e0e0;
-  color: #333;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
-
-body.light .number:hover,
-body.light .zero:hover {
-  background: #d0d0d0;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-}
-
-body.light .operator,
-body.light .equal {
-  background: #ff9500;
-  color: white;
-  box-shadow: 0 4px 15px rgba(255, 149, 0, 0.2);
-}
-
-body.light .operator:hover,
-body.light .equal:hover {
-  background: #ffb143;
-  box-shadow: 0 6px 20px rgba(255, 149, 0, 0.3);
-}
-
-body.light .clear {
-  background: #d3d3d3;
-  color: #333;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
-
-body.light .clear:hover {
-  background: #c5c5c5;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-}
-
-body.light .history {
-  color: rgba(0, 0, 0, 0.6);
-}
-
-body.light .theme-toggle {
-  background: #ddd;
-  border-color: #ccc;
-}
-
-body.light .theme-toggle:hover {
-  background: #ccc;
-}
-
-/* ============================================
-   RESPONSIVIDAD - TABLETS (768px o menos)
-   ============================================ */
-@media (max-width: 768px) {
-  .calculator {
-    width: 90vw;
-    max-width: 400px;
-    padding: 15px;
-    padding-top: 65px;
-    border-radius: 20px;
-  }
-
-  .btn {
-    height: 60px;
-    font-size: 1.4rem;
-  }
-
-  .display {
-    height: 80px;
-    font-size: 2.5rem;
-    margin-bottom: 15px;
-  }
-
-  .buttons {
-    gap: 12px;
-  }
-
-  .history {
-    font-size: 1rem;
-    right: 75px;
-  }
-
-  .theme-toggle {
-    width: 45px;
-    height: 45px;
-    font-size: 1.3rem;
-  }
-}
-
-/* ============================================
-   RESPONSIVIDAD - MÓVILES (480px o menos)
+   TELÉFONOS (480px o menos)
    ============================================ */
 @media (max-width: 480px) {
+  body { padding: var(--space-3); }
+
   .calculator {
-    width: 100%;
-    padding: 12px;
-    padding-top: 55px;
-    border-radius: 15px;
+    padding: var(--space-4);
+    padding-top: 64px;
   }
 
-  .btn {
-    height: 64px;
-    font-size: 1.2rem;
-    border-radius: 10px;
-  }
+  .history { top: 26px; left: var(--space-4); right: 64px; }
+  .theme-toggle { top: 16px; right: 16px; }
 
-  .display {
-    height: 70px;
-    font-size: 2rem;
-    padding: 0 15px;
-    margin-bottom: 12px;
-  }
-
-  .buttons {
-    gap: 10px;
-  }
-
-  .history {
-    font-size: 0.9rem;
-    right: 65px;
-    top: 25px;
-  }
-
-  .theme-toggle {
-    width: 40px;
-    height: 40px;
-    font-size: 1.2rem;
-    top: 15px;
-    right: 15px;
-  }
-
-  body {
-    padding: 10px;
-  }
+  .display { height: 80px; font-size: 2.75rem; }
+  .buttons { gap: 10px; }
+  .btn { height: 64px; font-size: 1.4rem; }
 }
 
-/* ============================================
-   RESPONSIVIDAD - MÓVILES MUY PEQUEÑOS (320px)
-   ============================================ */
+/* Teléfonos muy pequeños (360px o menos) */
 @media (max-width: 360px) {
-  .calculator {
-    width: 100%;
-    padding: 10px;
-    padding-top: 50px;
-  }
-
-  .btn {
-    height: 56px;
-    font-size: 1.1rem;
-  }
-
-  .display {
-    height: 60px;
-    font-size: 1.8rem;
-  }
-
-  .buttons {
-    gap: 8px;
-  }
+  .calculator { padding: var(--space-3); padding-top: 60px; }
+  .history { left: var(--space-3); }
+  .display { height: 68px; font-size: 2.25rem; }
+  .buttons { gap: var(--space-2); }
+  .btn { height: 56px; font-size: 1.25rem; border-radius: var(--radius-sm); }
 }
 
 /* ============================================
-   MODO OSCURO DEL SISTEMA (prefers-color-scheme)
-   ============================================ */
-@media (prefers-color-scheme: light) {
-  body {
-    background: var(--bg);
-  }
-
-  .calculator {
-    background: white;
-  }
-
-  .display {
-    background: #f8f9fa;
-    color: #333;
-  }
-}
-
-/* ============================================
-   ANIMACIONES DE TRANSICIÓN
+   ANIMACIÓN DE ENTRADA
    ============================================ */
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.calculator {
-  animation: fadeIn 0.3s ease-out;
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 /* ============================================
    REDUCCIÓN DE MOVIMIENTO (Accesibilidad)
    ============================================ */
 @media (prefers-reduced-motion: reduce) {
-  * {
+  *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
-
-  .btn:active {
-    transform: none;
-  }
-
-  .btn:hover {
-    transform: none;
-  }
+  .btn:active, .theme-toggle:active { transform: none; }
 }
