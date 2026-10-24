@@ -7,7 +7,10 @@ Calculadora web hecha con HTML, CSS y JavaScript puro, pensada para usarse cómo
 
 👉 **Pruébala aquí:** https://nickpro5677.github.io/Calculadora-digital/
 
-<img src="docs/captura.png" alt="Captura de la calculadora en un teléfono" width="300">
+<p>
+  <img src="docs/captura.png" alt="Calculadora en un teléfono, tema oscuro" width="260">
+  <img src="docs/captura-clara.png" alt="Calculadora en un teléfono, tema claro" width="260">
+</p>
 
 ## Funciones
 
@@ -30,12 +33,27 @@ Calculadora web hecha con HTML, CSS y JavaScript puro, pensada para usarse cómo
 
 | Tecla | Acción |
 |-------|--------|
-| `0`–`9`, `.` | Escribir número / decimal |
-| `+` `-` `*` `/` | Operadores (sumar, restar, multiplicar, dividir) |
+| `0`–`9`, `.` o `,` | Escribir número / decimal |
+| `+` `-` `*` (o `x`) `/` | Operadores (sumar, restar, multiplicar, dividir) |
 | `Enter` o `=` | Calcular resultado |
 | `Backspace` | Borrar último dígito |
-| `Escape` | Limpiar todo (C) |
+| `Escape` o `Supr` | Limpiar todo (C) |
 | `%` | Porcentaje |
+
+## Estructura del proyecto
+
+```
+Calculadora-digital/
+├── index.html          # La página (se queda en la raíz para GitHub Pages)
+├── src/
+│   ├── calc.js         # Lógica pura: operar y redondear (sin pantalla)
+│   ├── script.js       # Botones, teclado, tema e historial (usa calc.js)
+│   └── style.css       # Diseño y modo responsive
+├── tests/
+│   └── calc.test.js    # Pruebas de calc.js con node:test
+├── docs/               # Capturas para este README
+└── .github/workflows/  # CI: corre las pruebas en cada push
+```
 
 ## Tecnologías
 
@@ -62,7 +80,7 @@ JSON.parse(localStorage.getItem('operationHistory'))
 
 ## Pruebas
 
-La lógica de las cuentas está en `calc.js` (funciones puras) y se prueba con `npm test` (usa `node:test`, sin dependencias). GitHub Actions corre las pruebas en cada push.
+La lógica de las cuentas está en `src/calc.js` (funciones puras) y se prueba con `npm test` (usa `node:test`, sin dependencias). GitHub Actions corre las pruebas en cada push.
 
 ## Licencia
 
