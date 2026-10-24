@@ -191,37 +191,28 @@ function calculate() {
  * - Operadores: +, -, *, /
  * - Enter o =: Calcular resultado
  * - Backspace: Eliminar último dígito
- * - Escape: Limpiar todo
+ * - Escape o Supr: Limpiar todo
+ * - Coma (,) también sirve como punto, y x como multiplicar
  * - %: Calcular porcentaje
  */
 document.addEventListener('keydown', (e) => {
-  // Números y punto decimal
-  if ((e.key >= '0' && e.key <= '9') || e.key === '.') {
-    appendToDisplay(e.key);
-  }
-  
-  // Operadores
-  if (['+', '-', '*', '/'].includes(e.key)) {
-    setOperator(e.key);
-  }
-  
-  // Calcular resultado
-  if (e.key === 'Enter' || e.key === '=') {
-    calculate();
-  }
-  
-  // Eliminar último dígito
-  if (e.key === 'Backspace') {
-    deleteLast();
-  }
-  
-  // Limpiar todo
-  if (e.key === 'Escape') {
-    clearDisplay();
-  }
-  
-  // Porcentaje
-  if (e.key === '%') {
-    percent();
-  }
+  // Teclados en español: la coma sirve como punto decimal y la x como multiplicar
+  let key = e.key;
+  if (key === ',') key = '.';
+  if (key === 'x' || key === 'X') key = '*';
+
+  let handled = true; // ¿esta tecla es de la calculadora?
+
+  if ((key >= '0' && key <= '9') || key === '.') appendToDisplay(key);
+  else if (['+', '-', '*', '/'].includes(key)) setOperator(key);
+  else if (key === 'Enter' || key === '=') calculate();
+  else if (key === 'Backspace') deleteLast();
+  else if (key === 'Escape' || key === 'Delete') clearDisplay();
+  else if (key === '%') percent();
+  else handled = false;
+
+  // Si la tecla era nuestra, el navegador no hace su acción normal.
+  // Así Enter no vuelve a "pulsar" el último botón tocado
+  // y "/" no abre la búsqueda rápida de Firefox.
+  if (handled) e.preventDefault();
 });
