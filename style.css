@@ -78,11 +78,11 @@ body {
   font-weight: 300;
   letter-spacing: 2px;
   font-family: 'Courier New', monospace; /* Fuente monoespaciada para números */
-  cursor: not-allowed;
+  cursor: default;
 }
 
 /* ✨ Mejora: Efecto visual en el display */
-.display:disabled {
+.display[readonly] {
   opacity: 1;
 }
 
@@ -118,8 +118,8 @@ body {
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
 
-/* ✨ Estado de enfoque para accesibilidad con teclado */
-.btn:focus {
+/* ✨ Borde de enfoque solo al usar el teclado (no queda pegado al tocar en el teléfono) */
+.btn:focus-visible {
   outline: 2px solid #667eea;
   outline-offset: 2px;
 }
